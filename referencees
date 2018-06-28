@@ -10,7 +10,7 @@ https://www.youtube.com/results?search_query=dynamic+array
 
 
 
-
+############ Dynamic array Impleamentation #########################################
     // if (t_da->size == 4)
     // {
     //     b = tab;
@@ -26,3 +26,11 @@ https://www.youtube.com/results?search_query=dynamic+array
     // while (i < t_da->size)
     //     t[i] = d[i];
     // t_da->cur_len += t_da->size;
+
+    // while(++i < da.capacity/da.item_size)
+    // {
+    //     free(((uint8_t *)da.tab + (i * da.item_size)));
+    //     bzero(((uint8_t **)da.tab + (i * da.item_size)), da.item_size);
+    // }
+    // ft_bzero(((char*)newptr) + (ary->item_size * ary->item_count),
+    //         ary->item_size * (min_item_cap - ary->item_count));
