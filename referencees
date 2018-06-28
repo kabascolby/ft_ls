@@ -1,0 +1,28 @@
+https://en.wikipedia.org/wiki/Branch_table#Jump_table_example_in_C
+https://barrgroup.com/search/all/pointer%20to%20function
+http://www.martinbroadhurst.com/deque.html
+https://www.geeksforgeeks.org/implementation-deque-using-circular-array/
+https://en.wikipedia.org/wiki/Double-ended_queue#Applications
+https://en.wikipedia.org/wiki/Scheduling_(computing)  //A lire tres improtant sujet;
+current->prev = current->next;
+https://www.youtube.com/user/jms36086/videos
+https://www.youtube.com/results?search_query=dynamic+array
+
+
+
+
+    // if (t_da->size == 4)
+    // {
+    //     b = tab;
+    //     b += t_da->cur_len;
+    //     *b = *(uint32_t *)data;
+    // }
+    // if (t_da->cur_len == t_da->maxsize)
+    //     reallocate the array;
+    // d = (uint8_t *)data;
+    // t = (uint8_t *)t_da->tab;
+    // t += t_da->cur_len;
+    // i = 0;
+    // while (i < t_da->size)
+    //     t[i] = d[i];
+    // t_da->cur_len += t_da->size;
