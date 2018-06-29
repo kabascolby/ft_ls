@@ -1,86 +1,76 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_dynamic_array.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/06/28 20:03:33 by lkaba             #+#    #+#             */
+/*   Updated: 2018/06/28 22:13:12 by lkaba            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdint.h>
 
-/*
-**max_len : is data type size ex: sizeof(int)
-**data
-*/
-
-t_dymamic_array    ft_init_dynamic_array(size_t length, size_t data_t_size)
+t_dymamic_array		ft_init_dynamic_array(size_t length, size_t data_t_size)
 {
-    t_dymamic_array da;
-    da.length = 0;
-    da.item_size = data_t_size;
-    da.capacity = length * data_t_size;
-    da.tab = (void *)malloc(da.capacity);
-    memset(da.tab, 0, da.capacity);
-    return (da);
+	t_dymamic_array da;
+
+	if (!length)
+	{
+		ft_putendl("length is null");
+		return (da);
+	}
+	da.length = 0;
+	da.item_size = data_t_size;
+	da.capacity = length * data_t_size;
+	da.tab = (void *)malloc(da.capacity);
+	ft_memset(da.tab, 0, da.capacity);
+	return (da);
 }
 
-int ft_free_darray(t_dymamic_array *da)
+int					ft_free_darray(void *ptr)
 {
-    size_t i;
-
-    i = -1;
-    while(++i < da->capacity / da->length)
-        free((uint8_t *)da->tab + i * da->item_size);
-    ft_memdel(&da->tab);
-    if(da->tab)
-        return(0);
-    return (1);
+	ft_memdel(&ptr);
+	if (ptr)
+		return (0);
+	return (1);
 }
 
-uint8_t			ft_darray_grow(t_dymamic_array *da)
+uint8_t				ft_darray_grow(t_dymamic_array *da)
 {
 	void	*ptr;
-    size_t  cap;
+	size_t	cap;
+	size_t	i;
 
-    cap = da->capacity * 2;
-	ptr = (void *)malloc(cap);
-	if (!ptr)
+	cap = da->capacity * 2;
+	if (!(ptr = (void *)malloc(cap)))
 		return (0);
 	if (da->tab)
-    {
-      size_t i;
-
-      i = -1;
-      while(++i < (da->capacity / da->item_size))
-        memcpy((((uint8_t*)ptr) + i * da->item_size), (((uint8_t*)da->tab) + i * da->item_size), da->item_size);
-    }
-	if(ft_free_darray(da))
-    {
-        da->tab = ptr;
-        da->capacity = cap;
-    }
-    return (1);
+	{
+		i = -1;
+		while (++i < (da->capacity / da->item_size))
+			ft_memcpy((((uint8_t *)ptr) + i * da->item_size),
+				(((uint8_t *)da->tab) + i * da->item_size), da->item_size);
+		ft_memset((((uint8_t *)ptr) + da->capacity), 0, (cap - da->capacity));
+	}
+	if (ft_free_darray(da->tab))
+	{
+		da->tab = ptr;
+		da->capacity = cap;
+	}
+	return (1);
 }
 
-void ft_add_to_darray(void *data, t_dymamic_array *da)
+void				ft_add_to_darray(void *data, t_dymamic_array *da)
 {
-    if(da->length  ==  da->capacity / da->item_size)
-        ft_darray_grow(da);
-    uint8_t     i;
-    memcpy(((uint8_t*)da->tab) + da->length * da->item_size, data, da->item_size);
-    da->length += 1; 
-}
-
-int main(void)
-{ 
-    t_dymamic_array T;
-    char *k = "lamine";
-    char *m = "test";
-    T = ft_init_dynamic_array(2, sizeof(char *));
-    ft_add_to_darray(&k, &T);
-    ft_add_to_darray(&m, &T);
-    printf("t[0] = %s\n", ((char**)T.tab)[0]);
-    printf("t[1] = %s\n", *((char**)T.tab + 1));
-    ft_add_to_darray(&"Mohamed", &T);
-    printf("t[0] = %s\n", ((char**)T.tab)[0]);
-    printf("t[1] = %s\n", *((char**)T.tab + 1));
-    printf("t[1] = %s\n", *((char**)T.tab + 2));
-    
-    return (0);
+	if (da->length == da->capacity / da->item_size)
+		if (!ft_darray_grow(da))
+		{
+			ft_putendl("ft_darray_grow operation fail");
+			return ;
+		}
+	ft_memcpy(((uint8_t *)da->tab) + da->length *
+		da->item_size, data, da->item_size);
+	da->length += 1;
 }

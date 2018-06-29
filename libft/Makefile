@@ -70,7 +70,6 @@ FILES = ft_countwords.c\
 		ft_print_words_tables.c\
 		ft_strcchr.c\
 		doubly_linked.c\
-		ft_dequeue.c\
 		ft_dynamic_array.c\
 		ft_debug.c
 

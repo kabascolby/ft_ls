@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 13:33:59 by lkaba             #+#    #+#             */
-/*   Updated: 2018/06/27 11:11:56 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/06/28 10:26:41 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,5 +127,5 @@ t_dllnode		*create_dllnode(void *data);
 void			pushdll(void *data, t_dllnode *head);
 void			insertddl(size_t pos, void *data, t_dllnode *head);
 void			reverseddl(t_dllnode *head);
-t_dymamic_array	init_dynamic_array(size_t max, size_t data_t_size);
+t_dymamic_array	ft_init_dynamic_array(size_t max, size_t data_t_size);
 #endif

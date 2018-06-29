@@ -8,6 +8,8 @@ current->prev = current->next;
 https://www.youtube.com/user/jms36086/videos
 https://www.youtube.com/results?search_query=dynamic+array
 
+https://stackoverflow.com/questions/2182103/is-it-ok-to-free-void //freen th void *
+
 
 
 ############ Dynamic array Impleamentation #########################################
@@ -34,3 +36,12 @@ https://www.youtube.com/results?search_query=dynamic+array
     // }
     // ft_bzero(((char*)newptr) + (ary->item_size * ary->item_count),
     //         ary->item_size * (min_item_cap - ary->item_count));
+
+
+    int					ft_free_darray(void *ptr)
+{
+	ft_memdel(&ptr);
+	if (ptr)
+		return (0);
+	return (1);
+}

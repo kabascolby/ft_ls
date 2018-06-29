@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/25 11:49:09 by lkaba             #+#    #+#             */
-/*   Updated: 2018/06/27 12:20:39 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/06/28 10:16:06 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void		pushdll(void *data, t_dllnode *head)
 ** Check if the position exist to avoid leaks
 */
 
-int			is_ddl_overflow(int pos, t_dllnode *head)
+int			is_ddl_overflow(size_t pos, t_dllnode *head)
 {
 	t_dllnode	*tmp;
 	size_t		i;
