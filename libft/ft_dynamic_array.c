@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 20:03:33 by lkaba             #+#    #+#             */
-/*   Updated: 2018/06/28 22:13:12 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/01 04:57:01 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,6 @@ t_dymamic_array		ft_init_dynamic_array(size_t length, size_t data_t_size)
 	return (da);
 }
 
-int					ft_free_darray(void *ptr)
-{
-	ft_memdel(&ptr);
-	if (ptr)
-		return (0);
-	return (1);
-}
-
 uint8_t				ft_darray_grow(t_dymamic_array *da)
 {
 	void	*ptr;
@@ -54,11 +46,9 @@ uint8_t				ft_darray_grow(t_dymamic_array *da)
 				(((uint8_t *)da->tab) + i * da->item_size), da->item_size);
 		ft_memset((((uint8_t *)ptr) + da->capacity), 0, (cap - da->capacity));
 	}
-	if (ft_free_darray(da->tab))
-	{
-		da->tab = ptr;
-		da->capacity = cap;
-	}
+	free(da->tab);
+	da->tab = ptr;
+	da->capacity = cap;
 	return (1);
 }
 

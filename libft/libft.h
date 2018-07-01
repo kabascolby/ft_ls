@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 13:33:59 by lkaba             #+#    #+#             */
-/*   Updated: 2018/06/28 10:26:41 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/06/29 17:06:22 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "get_next_line.h"
 # include "ft_printf/ft_printf.h"
 # include "doubly_link.h"
+# include "ft_deque.h"
 
 typedef struct	s_list
 {
@@ -127,5 +128,8 @@ t_dllnode		*create_dllnode(void *data);
 void			pushdll(void *data, t_dllnode *head);
 void			insertddl(size_t pos, void *data, t_dllnode *head);
 void			reverseddl(t_dllnode *head);
-t_dymamic_array	ft_init_dynamic_array(size_t max, size_t data_t_size);
+t_dymamic_array	ft_init_dynamic_array(size_t length, size_t data_t_size);
+int				ft_free_darray(void *ptr);
+uint8_t			ft_darray_grow(t_dymamic_array *da);
+void			ft_add_to_darray(void *data, t_dymamic_array *da)
 #endif

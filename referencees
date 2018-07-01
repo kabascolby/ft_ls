@@ -45,3 +45,11 @@ https://stackoverflow.com/questions/2182103/is-it-ok-to-free-void //freen th voi
 		return (0);
 	return (1);
 }
+
+My deque Array will be implemented as following
+
+Adding Item to the front;
+Adding Item to the rear
+removing Item to the rear;
+And removing Item to the front;
+And removing Item to the rear;
