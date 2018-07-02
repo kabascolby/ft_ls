@@ -6,16 +6,17 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 20:03:33 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/01 04:57:01 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/02 04:19:54 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_dymamic_array		ft_init_dynamic_array(size_t length, size_t data_t_size)
+t_dynamic_array		ft_init_dynamic_array(size_t length, size_t data_t_size)
 {
-	t_dymamic_array da;
+	t_dynamic_array	da;
 
+	ft_bzero(&da, sizeof(t_dynamic_array));
 	if (!length)
 	{
 		ft_putendl("length is null");
@@ -29,7 +30,7 @@ t_dymamic_array		ft_init_dynamic_array(size_t length, size_t data_t_size)
 	return (da);
 }
 
-uint8_t				ft_darray_grow(t_dymamic_array *da)
+uint8_t				ft_darray_grow(t_dynamic_array *da)
 {
 	void	*ptr;
 	size_t	cap;
@@ -52,7 +53,7 @@ uint8_t				ft_darray_grow(t_dymamic_array *da)
 	return (1);
 }
 
-void				ft_add_to_darray(void *data, t_dymamic_array *da)
+void				ft_add_to_darray(void *data, t_dynamic_array *da)
 {
 	if (da->length == da->capacity / da->item_size)
 		if (!ft_darray_grow(da))

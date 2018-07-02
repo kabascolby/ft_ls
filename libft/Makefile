@@ -71,6 +71,8 @@ FILES = ft_countwords.c\
 		ft_strcchr.c\
 		doubly_linked.c\
 		ft_dynamic_array.c\
+		ft_deque.c\
+		ft_deque2.c\
 		ft_debug.c
 
 NAME = libft.a

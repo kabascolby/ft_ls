@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 13:33:59 by lkaba             #+#    #+#             */
-/*   Updated: 2018/06/29 17:06:22 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/02 04:19:06 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ typedef struct	s_queue
 	t_node		*rear;
 }				t_queue;
 
-typedef struct	s_dymamic_array
+typedef struct	s_dynamic_array
 {
 	void	*tab;
 	size_t	length;
 	size_t	capacity;
 	size_t	item_size;
-}				t_dymamic_array;
+}				t_dynamic_array;
 
 int				ft_toupper(int c);
 int				ft_tolower(int c);
@@ -128,8 +128,8 @@ t_dllnode		*create_dllnode(void *data);
 void			pushdll(void *data, t_dllnode *head);
 void			insertddl(size_t pos, void *data, t_dllnode *head);
 void			reverseddl(t_dllnode *head);
-t_dymamic_array	ft_init_dynamic_array(size_t length, size_t data_t_size);
+t_dynamic_array	ft_init_dynamic_array(size_t length, size_t data_t_size);
 int				ft_free_darray(void *ptr);
-uint8_t			ft_darray_grow(t_dymamic_array *da);
-void			ft_add_to_darray(void *data, t_dymamic_array *da)
+uint8_t			ft_darray_grow(t_dynamic_array *da);
+void			ft_add_to_darray(void *data, t_dynamic_array *da);
 #endif
