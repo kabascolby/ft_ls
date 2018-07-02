@@ -1,0 +1,770 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+typedef struct    s_dymamic_array
+{
+    void    *tab;
+    size_t    length;
+    size_t    capacity;
+    size_t    item_size;
+}                t_dymamic_array;
+
+t_dymamic_array    ft_init_dynamic_array(size_t length, size_t data_t_size)
+{
+    t_dymamic_array da;
+    da.length = 0;
+    da.item_size = data_t_size;
+    da.capacity = length * data_t_size;
+    da.tab = (void *)malloc(da.capacity);
+    memset(da.tab, 0, da.capacity);
+    return (da);
+}
+
+int ft_free_darray(t_dymamic_array *da)
+{
+    free(da->tab);
+    da->tab = NULL;
+    if(da->tab)
+        return(0);
+    return (1);
+}
+
+uint8_t            ft_darray_grow(t_dymamic_array *da)
+{
+    void    *ptr;
+    size_t  cap;
+
+    cap = da->capacity * 2;
+    if(!(ptr = (void *)malloc(cap)))
+        return (0);
+    if (da->tab)
+    {
+      size_t i;
+
+      i = -1;
+      while(++i < (da->capacity / da->item_size))
+        memcpy((((uint8_t*)ptr) + i * da->item_size), (((uint8_t*)da->tab) + i * da->item_size), da->item_size);
+    }
+    if(ft_free_darray(da))
+    {
+        da->tab = ptr;
+        da->capacity = cap;
+    }
+    return (1);
+}
+
+void ft_add_to_darray(void *data, t_dymamic_array *da)
+{
+    if (da->length == da->capacity / da->item_size)
+        if (!ft_darray_grow(da))
+        {
+            printf("ft_darray_grow");
+            return;
+        }
+    memcpy(((uint8_t*)da->tab) + da->length * da->item_size, data, da->item_size);
+    da->length += 1; 
+}
+
+int main(void)
+{ 
+    t_dymamic_array T;
+    char *k = "lamine";
+    char *m = "test";
+    char *x = "Mohamed";
+    T = ft_init_dynamic_array(2, sizeof(char *));
+    ft_add_to_darray(&k, &T);
+    ft_add_to_darray(&m, &T);
+    printf("t[0] = %s\n", ((char**)T.tab)[0]);
+    printf("t[1] = %s\n", *((char**)T.tab + 1));
+     printf("t[0] = %s\n", ((char**)T.tab)[0]);
+    printf("t[1] = %s\n", *((char**)T.tab + 1));
+    ft_add_to_darray(&x, &T);
+    printf("t[0] = %s\n", ((char**)T.tab)[0]);
+    printf("t[1] = %s\n", *((char**)T.tab + 1));
+    printf("t[2] = %s\n", ((char**)T.tab)[2]);
+    return (0);
+}
+
+
+##############################################################################################
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+typedef struct    s_deque
+{
+    void            *tab;
+    uint32_t        front;
+    uint32_t        rear;
+    uint32_t        len;
+    uint32_t        max;
+    uint32_t        capacity;
+    uint32_t        s;
+}                  t_deque;
+
+t_deque init_deque(uint32_t length, uint8_t data_t_size)
+{
+  t_deque dq;
+  
+  dq.len = 0;
+  dq.rear = -1;
+  dq.front = -1;
+  dq.s = data_t_size;
+  dq.max = length;
+  dq.capacity = length * data_t_size;
+  dq.tab = (void *)malloc(dq.capacity);
+  return(dq);
+}
+
+int ft_free_darray(void *data)
+{
+    free(data);
+    data = NULL;
+    if(data)
+        return(0);
+    return (1);
+}
+
+uint8_t                ft_dq_grow(t_deque *dq)
+{
+    void    *ptr;
+    size_t    cap;
+    size_t    i;
+
+    cap = dq->capacity * 2;
+    if (!(ptr = (void *)malloc(cap)))
+        return (0);
+    if (dq->tab)
+    {
+        i = -1;
+        while (++i < (dq->capacity / dq->s))
+            memcpy((((uint8_t *)ptr) + i * dq->s),
+                (((uint8_t *)dq->tab) + i * dq->s), dq->s);
+        memset((((uint8_t *)ptr) + dq->capacity), 0, (cap - dq->capacity));
+    }
+    if (ft_free_darray(dq->tab))
+    {
+        dq->tab = ptr;
+        dq->capacity = cap;
+        dq->max *= 2;
+    }
+    return (1);
+}
+
+uint8_t is_dq_empty(t_deque *dq)
+{
+    return(dq->front == -1 && dq->front == -1);
+}
+
+/*
+**push_front
+*/
+
+void                ft_enqueue_rear_dq(void *data, t_deque *dq)
+{
+    if((dq->rear + 1) % dq->max == dq->front)
+    {
+        if (!ft_dq_grow(dq))
+        {
+            printf("ft_darray_grow operation fail\n");
+            return ;
+        }
+    }
+    
+    if(is_dq_empty(dq))
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    else
+        dq->rear = (dq->rear + 1) % dq->max;
+    memcpy(((uint8_t *)dq->tab) + dq->rear *
+        dq->s, data, dq->s);
+}
+
+/*
+**push_rear
+*/
+
+void                ft_enqueue_front_dq(void *data, t_deque *dq)
+{
+    uint32_t f;
+
+    f = !dq->front ? dq->max - 1 : dq->front - 1;
+    if(f == dq->rear)
+    {
+        if (!ft_dq_grow(dq))
+        {
+            printf("ft_darray_grow operation fail\n");
+            return ;
+        }
+        f = dq->max - 1;
+    }
+    if(is_dq_empty(dq))
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    else
+        dq->front = f;
+    memcpy(((uint8_t *)dq->tab) + dq->front *
+        dq->s, data, dq->s);
+}
+
+
+int main()
+{
+  t_deque T;
+
+    char *a = "lamine";    
+    T = init_deque(2, sizeof(char *));
+    ft_enqueue_rear_dq(a, &T);
+    char *b = "test";
+    ft_enqueue_rear_dq(b, &T);
+    char *c = "Mohamed";
+    ft_enqueue_front_dq(c, &T);
+    char *d = "hello";
+    ft_enqueue_rear_dq(d, &T);
+    char *e = "Messi";
+    ft_enqueue_rear_dq(e, &T);
+    char *f = "Marietou";
+    ft_enqueue_front_dq(f, &T);
+    char *g = "Acya";
+    ft_enqueue_front_dq(g, &T);
+    // printf("t[0] = %s\n", ((char**)T.tab)[0]);
+    // printf("t[1] = %s\n", *((char**)T.tab + 1));
+    // printf("t[0] = %s\n", ((char**)T.tab)[2]);
+    // printf("t[1] = %s\n", *((char**)T.tab + 3));
+    // printf("t[0] = %s\n", ((char**)T.tab)[4]);
+    // printf("t[1] = %s\n", *((char**)T.tab + 5));
+    // printf("t[2] = %s\n", ((char*)T.tab)[6]);
+    return (0);
+}
+
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+typedef struct    s_deque
+{
+    void            *tab;
+    uint32_t        front;
+    uint32_t        rear;
+    uint32_t        len;
+    uint32_t        max;
+    uint32_t        ff;
+    uint32_t        capacity;
+    uint32_t        s;
+}                  t_deque;
+
+t_deque init_deque(uint32_t length, uint8_t data_t_size)
+{
+  t_deque dq;
+  
+  dq.len = 0;
+  dq.rear = -1;
+  dq.front = -1;
+  dq.ff = -1;
+  dq.s = data_t_size;
+  dq.max = length;
+  dq.capacity = length * data_t_size;
+  dq.tab = (void *)malloc(dq.capacity);
+  return(dq);
+}
+
+int ft_free_darray(void *data)
+{
+    free(data);
+    data = NULL;
+    if(data)
+        return(0);
+    return (1);
+}
+
+uint8_t                ft_dq_grow(t_deque *dq)
+{
+    void    *ptr;
+    size_t    cap;
+    size_t    i;
+    size_t    j;
+    size_t    k;
+    
+    k = 4294967295;
+    cap = dq->capacity * 2;
+    if (!(ptr = (void *)malloc(cap)))
+        return (0);
+    if (dq->tab)
+    {
+        i = -1;
+        j = (dq->front == 0) ? dq->max -1 : dq->front ;
+        while (++i < j)
+            memcpy((((uint8_t *)ptr) + i * dq->s),
+                (((uint8_t *)dq->tab) + i * dq->s), dq->s);
+        if(dq->front && dq->front != k)
+        {
+          i = dq->front -1;
+          j = -1;
+          while(i++ < dq->max)
+              memcpy((((uint8_t *)ptr) + i * dq->s),
+                (((uint8_t *)dq->tab) + (i +  dq->max) * dq->s), dq->s);
+        }
+        //memset((((uint8_t *)ptr) + dq->capacity), 0, (cap - dq->capacity));
+    }
+    if (ft_free_darray(dq->tab))
+    {
+        dq->tab = ptr;
+        dq->capacity = cap;
+        dq->max *= 2;
+    }
+    return (1);
+}
+
+uint8_t is_dq_empty(t_deque *dq)
+{
+    return(dq->front == -1 && dq->front == -1);
+}
+
+/*
+**push_front
+*/
+
+void                ft_enqueue_rear_dq(void *data, t_deque *dq)
+{
+    if((dq->rear + 1) % dq->max == dq->front)
+    {
+        if (!ft_dq_grow(dq))
+        {
+            printf("ft_darray_grow operation fail\n");
+            return ;
+        }
+    }
+    
+    if(is_dq_empty(dq))
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    else
+        dq->rear = (dq->rear + 1) % dq->max;
+    memcpy(((uint8_t *)dq->tab) + dq->rear *
+        dq->s, data, dq->s);
+}
+
+/*
+**push_rear
+*/
+
+void                ft_enqueue_front_dq(void *data, t_deque *dq)
+{
+    uint32_t f;
+
+    f = !dq->front ? dq->max - 1 : dq->front - 1;
+    if(f == dq->rear)
+    {
+        if (!ft_dq_grow(dq))
+        {
+            printf("ft_darray_grow operation fail\n");
+            return ;
+        }
+        f = (f + (dq->max / 2)) - 1 ;
+    }
+    if(is_dq_empty(dq))
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    else
+        dq->front = f;
+    memcpy(((uint8_t *)dq->tab) + dq->front *
+        dq->s, data, dq->s);
+}
+
+
+int main()
+{
+  t_deque T;
+
+    char *a = "lamine";    
+    T = init_deque(2, sizeof(char *));
+    ft_enqueue_rear_dq(a, &T);
+    char *b = "test";
+    ft_enqueue_rear_dq(b, &T);
+    char *c = "Mohamed";
+    ft_enqueue_front_dq(c, &T);
+    char *d = "hello";
+    ft_enqueue_rear_dq(d, &T);
+    char *e = "Messi";
+    ft_enqueue_rear_dq(e, &T);
+    char *f = "Marietou";
+    ft_enqueue_front_dq(f, &T);
+    char *g = "Acya";
+    ft_enqueue_front_dq(g, &T);
+    // printf("t[0] = %s\n", ((char**)T.tab)[0]);
+    // printf("t[1] = %s\n", *((char**)T.tab + 1));
+    // printf("t[0] = %s\n", ((char**)T.tab)[2]);
+    // printf("t[1] = %s\n", *((char**)T.tab + 3));
+    // printf("t[0] = %s\n", ((char**)T.tab)[4]);
+    // printf("t[1] = %s\n", *((char**)T.tab + 5));
+    // printf("t[2] = %s\n", ((char*)T.tab)[6]);
+    return (0);
+}
+#########################################################################################################################
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+typedef struct    s_deque
+{
+    void            *tab;
+    uint32_t        front;
+    uint32_t        rear;
+    uint32_t        len;
+    uint32_t        max;
+    uint32_t        f;
+    uint32_t        capacity;
+    uint32_t        s;
+}                  t_deque;
+
+t_deque init_deque(uint32_t length, uint8_t data_t_size)
+{
+
+  t_deque dq;
+  
+  dq.len = 0;
+  dq.rear = -1;
+  dq.front = -1;
+  //dq.ff = -1;
+  dq.s = data_t_size;
+  dq.max = length;
+  dq.capacity = length * data_t_size;
+  dq.tab = (void *)malloc(dq.capacity);
+  return(dq);
+}
+
+uint8_t                ft_dq_grow(t_deque *dq)
+{
+    void    *ptr;
+    size_t    cap;
+    size_t    i;
+    size_t    j;
+    uint32_t    k;
+    
+    k = -1;
+    cap = dq->capacity * 2;
+    if (!(ptr = (void *)malloc(cap)))
+        return (0);
+      memset((uint8_t *)ptr,0, cap);
+    if (dq->tab)
+    {
+        i = -1;
+        j = (dq->front == 0) ? dq->max : dq->front ;
+        while (++i < j)
+            memcpy((((uint8_t *)ptr) + i * dq->s),
+                (((uint8_t *)dq->tab) + i * dq->s), dq->s);
+        if(dq->front && dq->front != k)
+        {
+          i = dq->max;
+          while(--i >= dq->front)
+          {
+              memcpy((((uint8_t *)ptr) + (i +  dq->max) * dq->s),
+                (((uint8_t *)dq->tab) + i * dq->s), dq->s);
+          }
+        }
+    }
+    free(dq->tab);
+    dq->tab = ptr;
+    dq->capacity = cap;
+    dq->max *= 2;
+    return (1);
+}
+
+uint8_t is_dq_empty(t_deque *dq)
+{
+  uint32_t    k;
+  k = -1;
+    return(dq->front == k && dq->front == k);
+}
+
+/*
+**push_front
+*/
+
+void                ft_enqueue_rear_dq(void *data, t_deque *dq)
+{
+    if(is_dq_empty(dq))
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    else
+        dq->rear = (dq->rear + 1) % dq->max;
+    if(dq->rear && dq->rear == dq->front)
+    {
+        if (!ft_dq_grow(dq))
+        {
+            printf("ft_darray_grow operation fail\n");
+            return ;
+        }
+        if(dq->front)
+          dq->front += dq->max/2;
+    }
+    memcpy(((uint8_t *)dq->tab) + dq->rear *
+        dq->s, data, dq->s);
+}
+
+/*
+**push_rear
+*/
+
+void                ft_enqueue_front_dq(void *data, t_deque *dq)
+{
+    uint32_t f;
+
+    if(is_dq_empty(dq))
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    dq->f = !dq->front ? dq->max - 1 : dq->front - 1;
+    if(dq->f == dq->rear)
+    {
+        if (!ft_dq_grow(dq))
+        {
+            printf("ft_darray_grow operation fail\n");
+            return ;
+        }
+        dq->front = dq->f +  dq->max/2;
+        memcpy(((uint8_t *)dq->tab) + dq->front *
+        dq->s, data, dq->s);
+    }
+    else
+    {
+      dq->front = dq->f;      
+      memcpy(((uint8_t *)dq->tab) + dq->front *
+        dq->s, data, dq->s);
+    }
+      dq->f = 0;
+}
+
+
+int main()
+{
+  t_deque T;
+
+    char *a = "lamine";    
+    T = init_deque(2, sizeof(char *));
+    ft_enqueue_rear_dq(a, &T);
+    char *b = "test";
+    ft_enqueue_rear_dq(b, &T);
+    char *c = "Mohamed";
+    ft_enqueue_front_dq(c, &T);
+    char *d = "hello";
+    ft_enqueue_rear_dq(d, &T);
+    char *e = "Messi";
+    ft_enqueue_rear_dq(e, &T);
+    char *f = "Marietou";
+    ft_enqueue_front_dq(f, &T);
+    char *g = "Acya";
+    ft_enqueue_front_dq(g, &T);
+    char *h = "Hamdullah";
+    ft_enqueue_rear_dq(h, &T);
+    char *i = "Iman";
+    ft_enqueue_front_dq(i, &T);
+    // printf("t[0] = %s\n", ((char**)T.tab)[0]);
+    // printf("t[1] = %s\n", *((char**)T.tab + 1));
+    // printf("t[0] = %s\n", ((char**)T.tab)[2]);
+    // printf("t[1] = %s\n", *((char**)T.tab + 3));
+    // printf("t[0] = %s\n", ((char**)T.tab)[4]);
+    // printf("t[1] = %s\n", *((char**)T.tab + 5));
+    // printf("t[2] = %s\n", ((char*)T.tab)[6]);
+    return (0);
+}
+
+#############################################################################
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+typedef struct    s_deque
+{
+    void            *tab;
+    uint32_t        front;
+    uint32_t        rear;
+    uint32_t        len;
+    uint32_t        max;
+    uint32_t        f;
+    uint32_t        capacity;
+    uint32_t        s;
+}                  t_deque;
+
+t_deque        init_deque(uint32_t length, uint8_t data_t_size)
+{
+    t_deque dq;
+
+    dq.len = 0;
+    dq.rear = -1;
+    dq.front = -1;
+    dq.f = 0;
+    dq.s = data_t_size;
+    dq.max = length;
+    dq.capacity = length * data_t_size;
+    dq.tab = (void *)malloc(dq.capacity);
+    return (dq);
+}
+
+uint8_t        ft_dq_grow(t_deque *dq)
+{
+    void        *ptr;
+    size_t        cap;
+    size_t        i;
+    size_t        j;
+    uint32_t    k;
+
+    k = -1;
+    cap = dq->capacity * 2;
+    if (!(ptr = (void *)malloc(cap)))
+        return (0);
+    if (dq->tab)
+    {
+        i = -1;
+        j = (dq->front == 0) ? dq->max : dq->front;
+        while (++i < j)
+            memcpy((((uint8_t *)ptr) + i * dq->s),
+                   (((uint8_t *)dq->tab) + i * dq->s), dq->s);
+        if (dq->front && dq->front != k)
+        {
+            i = dq->max;
+            while (--i >= dq->front)
+                memcpy((((uint8_t *)ptr) + (i + dq->max) * dq->s),
+                       (((uint8_t *)dq->tab) + i * dq->s), dq->s);
+        }
+        //memset((uint8_t *)ptr, 0, cap);
+    }
+    free(dq->tab);
+    dq->tab = ptr;
+    dq->capacity = cap;
+    dq->max *= 2;
+    return (1);
+}
+
+uint8_t        is_dq_empty(t_deque *dq)
+{
+    uint32_t    k;
+
+    k = -1;
+    return (dq->front == k && dq->front == k);
+}
+
+void        ft_enqueue_rear_dq(void *data, t_deque *dq)
+{
+    if (is_dq_empty(dq))
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    else
+        dq->rear = (dq->rear + 1) % dq->max;
+    if (dq->rear && dq->rear == dq->front)
+    {
+        if (!ft_dq_grow(dq))
+        {
+            printf("ft_darray_grow operation fail\n");
+            return;
+        }
+        if (dq->front)
+            dq->front += dq->max / 2;
+    }
+    memcpy(((uint8_t *)dq->tab) + dq->rear * dq->s, data, dq->s);
+}
+
+void        ft_enqueue_front_dq(void *data, t_deque *dq)
+{
+    if (is_dq_empty(dq))
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    dq->f = !dq->front ? dq->max - 1 : dq->front - 1;
+    if (dq->f == dq->rear)
+    {
+        if (!ft_dq_grow(dq))
+        {
+            printf("ft_darray_grow operation fail\n");
+            return;
+        }
+        dq->front = dq->f + dq->max / 2;
+        memcpy(((uint8_t *)dq->tab) + dq->front * dq->s, data, dq->s);
+    }
+    else
+    {
+        dq->front = dq->f;
+        memcpy(((uint8_t *)dq->tab) + dq->front * dq->s, data, dq->s);
+    }
+    dq->f = 0;
+}
+
+void        *dequeue_front(t_deque *dq)
+{
+    void     *tmp;
+
+    if (is_dq_empty(dq) && (printf("Is empty\n")))
+        return(0);
+    tmp = (void *)malloc(dq->s);
+    if (dq->front == dq->rear)
+    {
+        memcpy(tmp, ((uint8_t *)dq->tab) + dq->front * dq->s, dq->s);
+        dq->rear = -1;
+        dq->front = -1;
+    }
+    else
+    {
+        memcpy(tmp, ((uint8_t *)dq->tab) + dq->front * dq->s, dq->s);
+        dq->front = (dq->front + 1) % dq->max;
+    }
+    return (tmp);
+}
+
+void        *dq_rear(t_deque *dq)
+{
+    return (dq->tab + dq->rear * dq->s);
+}
+
+void    *dq_front(t_deque *dq)
+{
+    return (dq->tab + dq->front * dq->s);
+}
+
+int main() 
+{
+  t_deque T;
+  T = init_deque(2, sizeof(int));
+  int a = 16;
+  ft_enqueue_rear_dq(&a, &T);
+  printf("rear = %d\n",*(int *)dq_rear(&T));
+  printf("front = %d\n",*(int *)dq_front(&T));
+  int b = 17;
+  ft_enqueue_front_dq(&b, &T);
+  int c = 9;
+  ft_enqueue_rear_dq(&c, &T);
+  int d = 78;
+  ft_enqueue_front_dq(&d, &T);
+  printf("rear = %d\n",*(int *)dq_rear(&T));
+  printf("front = %d\n",*(int *)dq_front(&T));
+  printf("dequeue front = %d\n",*(int *)dequeue_front(&T));
+  printf("dequeue front = %d\n",*(int *)dequeue_front(&T));
+  printf("dequeue front = %d\n",*(int *)dequeue_front(&T));
+  int e = 10;
+  ft_enqueue_rear_dq(&e, &T);
+  int f = 8;
+  ft_enqueue_rear_dq(&f, &T);
+  return 0;
+}
