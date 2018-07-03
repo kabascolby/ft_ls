@@ -768,3 +768,212 @@ int main()
   ft_enqueue_rear_dq(&f, &T);
   return 0;
 }
+
+#########################################
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+# define U32 4294967295
+
+typedef struct    s_deque
+{
+    void            *tab;
+    uint32_t        front;
+    uint32_t        rear;
+    uint32_t        curr_size;
+    uint32_t        max;
+    uint32_t        data_size;
+    uint32_t        capacity;
+    uint32_t        f;
+}                t_deque;
+
+t_deque        init_deque(uint32_t length, uint8_t data_t_size)
+{
+    t_deque    dq;
+
+    dq.rear = 0;
+    dq.front = 0;
+    dq.f = 0;
+    dq.curr_size = 0;
+    dq.max = length;
+    dq.data_size = data_t_size;
+    dq.capacity = length * data_t_size;
+    dq.tab = malloc(dq.capacity);
+    return (dq);
+}
+
+uint8_t        is_dq_empty(t_deque *dq)
+{
+    return (!dq->curr_size);
+}
+
+/*
+**rear
+*/
+
+void        *dq_peek_rear(t_deque *dq)
+{
+    return (dq->tab + dq->rear * dq->data_size);
+}
+
+/*
+**front
+*/
+
+void        *dq_peek_front(t_deque *dq)
+{
+    return (dq->tab + (dq->front == 0 ? (dq->max - 1) : (dq->front - 1)) * dq->data_size);
+}
+
+/*
+**    Returns a copy of the circular array, converted to a linear array
+*/
+
+void        *dq_arraydup(t_deque *dq)
+{
+    void        *tmp;
+
+    if (is_dq_empty(dq))
+        return (NULL);
+    tmp = malloc(dq->data_size * dq->curr_size);
+    if (!tmp)
+        return (NULL);
+    if (dq->rear < dq->front)
+    {
+        memcpy(tmp, dq->tab + dq->rear, (dq->front - dq->rear) * dq->data_size);
+    }
+    else
+    {
+        memcpy(tmp, dq->tab + dq->rear, (dq->max - dq->rear) * dq->data_size);
+        memcpy(tmp + ((dq->max - dq->rear) * dq->data_size), dq->tab, dq->front * dq->data_size);
+    }
+    return (tmp);
+}
+
+uint8_t        dq_grow(t_deque *dq)
+{
+    uint8_t        *ptr;
+    uint32_t    rear_index;
+    uint32_t    old_rear;
+
+    dq->capacity *= 2;
+    dq->max *= 2;
+    if (!(ptr = (void *)calloc(dq->capacity, 1)))
+        return (0);
+    old_rear = dq->rear * dq->data_size;
+    rear_index = (dq->max * dq->data_size) - old_rear;
+    memcpy(ptr + rear_index, (uint8_t *)dq->tab + old_rear, (dq->max * dq->data_size) - rear_index);
+    memcpy(ptr, dq->tab, dq->front * dq->data_size);
+    dq->rear = rear_index / dq->data_size;
+    free(dq->tab);
+    dq->tab = (void *)ptr;
+    return (1);
+}
+
+/*
+**push_rear
+*/
+
+void        enqueue_rear(t_deque *dq, void *data)
+{
+    if (dq->curr_size == dq->max)
+    {
+        if (!dq_grow(dq))
+        {
+            return ;
+        }
+    }
+    dq->rear -= 1;
+    dq->rear %= dq->max;
+    memcpy(((uint8_t *)dq->tab) + dq->rear * dq->data_size, data, dq->data_size);
+    dq->curr_size++;
+}
+
+/*
+**push_front
+*/
+
+void        enqueue_front(t_deque *dq, void *data)
+{
+    if (dq->curr_size == dq->max)
+    {
+        if (!dq_grow(dq))
+        {
+            return ;
+        }
+    }
+    memcpy(((uint8_t *)dq->tab) + dq->front * dq->data_size, data, dq->data_size);
+    dq->front = (dq->front + 1) % dq->max;
+    dq->curr_size++;
+}
+
+/*
+**pop_rear
+*/
+
+void        *dequeue_rear(t_deque *dq)
+{
+    void    *tmp;
+
+    if (is_dq_empty(dq))
+        return (NULL);
+    tmp = (void *)malloc(dq->data_size);
+    if (!tmp)
+        return (NULL);
+    memcpy(tmp, ((uint8_t *)dq->tab) + dq->rear * dq->data_size, dq->data_size);
+    dq->rear = (dq->rear + 1) % dq->max;
+    dq->curr_size--;
+    return (tmp);
+}
+
+/*
+**pop from the front
+*/
+
+void        *dequeue_front(t_deque *dq)
+{
+    void    *tmp;
+
+    if (is_dq_empty(dq))
+        return (NULL);
+    dq->front -= 1;
+    dq->front %= dq->max;
+    tmp = (void *)malloc(dq->data_size);
+    if (!tmp)
+        return (NULL);
+    memcpy(tmp, ((uint8_t *)dq->tab) + dq->front * dq->data_size, dq->data_size);
+    dq->curr_size--;
+    return (tmp);
+}
+
+
+int main() 
+{
+  t_deque T;
+  void *J;
+  T = init_deque(2, sizeof(int));
+  int a = 16;
+  enqueue_rear(&T, &a);
+  printf("rear = %d\n",*(int *)dq_peek_rear(&T));
+  printf("front = %d\n",*(int *)dq_peek_front(&T));
+  int b = 17;
+  enqueue_front(&T, &b);
+  int c = 9;
+  enqueue_rear(&T, &c);
+  int d = 78;
+  enqueue_front(&T, &d);
+  printf("rear = %d\n",*(int *)dq_peek_rear(&T));
+  printf("front = %d\n",*(int *)dq_peek_front(&T));
+  printf("dequeue front = %d\n",*(int *)dequeue_front(&T));
+  printf("dequeue front = %d\n",*(int *)dequeue_front(&T));
+  printf("dequeue front = %d\n",*(int *)dequeue_front(&T));
+  int e = 10;
+  enqueue_rear(&T, &e);
+  int f = 8;
+  enqueue_rear(&T, &f);
+  printf("rear = %d\n",*(int *)dq_peek_rear(&T));
+  printf("front = %d\n",*(int *)dq_peek_front(&T));
+  J = dq_arraydup(&T);
+  return 0;
+}

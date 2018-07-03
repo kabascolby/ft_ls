@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/01 21:19:22 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/02 04:01:06 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/03 12:27:51 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,25 @@
 **"max": is the maximun size of the array
 */
 
-uint8_t		ft_dq_grow(t_deque *dq)
+uint8_t		dq_grow(t_deque *dq)
 {
-	void		*ptr;
-	size_t		i;
-	size_t		j;
+	uint8_t		*ptr;
+	uint32_t	rear_index;
+	uint32_t	old_rear;
 
 	dq->capacity *= 2;
+	dq->max *= 2;
 	if (!(ptr = (void *)malloc(dq->capacity)))
 		return (0);
 	ft_memset((uint8_t *)ptr, 0, dq->capacity);
-	if (dq->tab && (i = -1))
-	{
-		j = (dq->front == 0) ? dq->max : dq->front;
-		while (++i < j)
-			ft_memcpy((((uint8_t *)ptr) + i * dq->s),
-				(((uint8_t *)dq->tab) + i * dq->s), dq->s);
-		if (dq->front && dq->front != U32)
-		{
-			i = dq->max;
-			while (--i >= dq->front)
-				ft_memcpy((((uint8_t *)ptr) + (i + dq->max) * dq->s),
-					(((uint8_t *)dq->tab) + i * dq->s), dq->s);
-		}
-	}
+	old_rear = dq->rear * dq->data_size;
+	rear_index = (dq->max * dq->data_size) - old_rear;
+	ft_memcpy(ptr + rear_index, (uint8_t *)dq->tab + old_rear,
+		(dq->max * dq->data_size) - rear_index);
+	ft_memcpy(ptr, dq->tab, dq->front * dq->data_size);
+	dq->rear = rear_index / dq->data_size;
 	free(dq->tab);
-	dq->max ? (dq->tab = ptr) && (dq->max *= 2) : 0;
+	dq->tab = (void *)ptr;
 	return (1);
 }
 
@@ -61,56 +54,35 @@ uint8_t		ft_dq_grow(t_deque *dq)
 **push_rear
 */
 
-void		ft_enqueue_rear_dq(void *data, t_deque *dq)
+void		enqueue_rear(t_deque *dq, void *data)
 {
-	if (is_dq_empty(dq))
+	if (dq->curr_size == dq->max)
 	{
-		dq->front = 0;
-		dq->rear = 0;
-	}
-	else
-		dq->rear = (dq->rear + 1) % dq->max;
-	if (dq->rear && dq->rear == dq->front)
-	{
-		if (!ft_dq_grow(dq))
-		{
-			ft_putendl("ft_darray_grow operation fail\n");
+		if (!dq_grow(dq))
 			return ;
-		}
-		if (dq->front)
-			dq->front += dq->max / 2;
 	}
-	ft_memcpy(((uint8_t *)dq->tab) + dq->rear * dq->s, data, dq->s);
+	dq->rear -= 1;
+	dq->rear %= dq->max;
+	ft_memcpy(((uint8_t *)dq->tab) + dq->rear *
+		dq->data_size, data, dq->data_size);
+	dq->curr_size++;
 }
 
 /*
 **push_front
 */
 
-void		ft_enqueue_front_dq(void *data, t_deque *dq)
+void		enqueue_front(t_deque *dq, void *data)
 {
-	if (is_dq_empty(dq))
+	if (dq->curr_size == dq->max)
 	{
-		dq->front = 0;
-		dq->rear = 0;
-	}
-	dq->f = !dq->front ? dq->max - 1 : dq->front - 1;
-	if (dq->f == dq->rear)
-	{
-		if (!ft_dq_grow(dq))
-		{
-			ft_putendl("ft_darray_grow operation fail");
+		if (!dq_grow(dq))
 			return ;
-		}
-		dq->front = dq->f + dq->max / 2;
-		ft_memcpy(((uint8_t *)dq->tab) + dq->front * dq->s, data, dq->s);
 	}
-	else
-	{
-		dq->front = dq->f;
-		ft_memcpy(((uint8_t *)dq->tab) + dq->front * dq->s, data, dq->s);
-	}
-	dq->f = 0;
+	ft_memcpy(((uint8_t *)dq->tab) + dq->front *
+		dq->data_size, data, dq->data_size);
+	dq->front = (dq->front + 1) % dq->max;
+	dq->curr_size++;
 }
 
 /*
@@ -121,20 +93,15 @@ void		*dequeue_rear(t_deque *dq)
 {
 	void	*tmp;
 
-	if (is_dq_empty(dq) && (ft_printf("Is empty\n")))
-		return (0);
-	tmp = (void *)malloc(dq->s);
-	if (dq->front == dq->rear)
-	{
-		ft_memcpy(tmp, ((uint8_t *)dq->tab) + dq->rear * dq->s, dq->s);
-		dq->rear = -1;
-		dq->front = -1;
-	}
-	else
-	{
-		ft_memcpy(tmp, ((uint8_t *)dq->tab) + dq->rear * dq->s, dq->s);
-		dq->rear = (dq->rear - 1) % dq->max;
-	}
+	if (is_dq_empty(dq))
+		return (NULL);
+	tmp = (void *)malloc(dq->data_size);
+	if (!tmp)
+		return (NULL);
+	ft_memcpy(tmp, ((uint8_t *)dq->tab) + dq->rear *
+		dq->data_size, dq->data_size);
+	dq->rear = (dq->rear + 1) % dq->max;
+	dq->curr_size--;
 	return (tmp);
 }
 
@@ -146,19 +113,15 @@ void		*dequeue_front(t_deque *dq)
 {
 	void	*tmp;
 
-	if (is_dq_empty(dq) && (ft_printf("Is empty\n")))
-		return (0);
-	tmp = (void *)malloc(dq->s);
-	if (dq->front == dq->rear)
-	{
-		ft_memcpy(tmp, ((uint8_t *)dq->tab) + dq->front * dq->s, dq->s);
-		dq->rear = -1;
-		dq->front = -1;
-	}
-	else
-	{
-		ft_memcpy(tmp, ((uint8_t *)dq->tab) + dq->front * dq->s, dq->s);
-		dq->front = (dq->front + 1) % dq->max;
-	}
+	if (is_dq_empty(dq))
+		return (NULL);
+	dq->front -= 1;
+	dq->front %= dq->max;
+	tmp = (void *)malloc(dq->data_size);
+	if (!tmp)
+		return (NULL);
+	ft_memcpy(tmp, ((uint8_t *)dq->tab) + dq->front *
+		dq->data_size, dq->data_size);
+	dq->curr_size--;
 	return (tmp);
 }

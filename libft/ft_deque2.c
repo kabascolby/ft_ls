@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/02 03:43:28 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/02 04:04:18 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/03 12:32:10 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,29 @@ t_deque		init_deque(uint32_t length, uint8_t data_t_size)
 {
 	t_deque	dq;
 
-	dq.len = 0;
-	dq.rear = -1;
-	dq.front = -1;
+	dq.rear = 0;
+	dq.front = 0;
 	dq.f = 0;
-	dq.s = data_t_size;
+	dq.curr_size = 0;
 	dq.max = length;
+	dq.data_size = data_t_size;
 	dq.capacity = length * data_t_size;
-	dq.tab = (void *)malloc(dq.capacity);
+	dq.tab = malloc(dq.capacity);
 	return (dq);
 }
 
 uint8_t		is_dq_empty(t_deque *dq)
 {
-	return (dq->front == U32 && dq->front == U32);
+	return (!dq->curr_size);
 }
 
 /*
 **rear
 */
 
-void		*dq_peak_rear(t_deque *dq)
+void		*dq_peek_rear(t_deque *dq)
 {
-	return (dq->tab + dq->rear * dq->s);
+	return (dq->tab + dq->rear * dq->data_size);
 }
 
 /*
@@ -63,5 +63,34 @@ void		*dq_peak_rear(t_deque *dq)
 
 void		*dq_peek_front(t_deque *dq)
 {
-	return (dq->tab + dq->front * dq->s);
+	return (dq->tab + (dq->front == 0 ?
+		(dq->max - 1) : (dq->front - 1)) * dq->data_size);
+}
+
+/*
+**	Returns a copy of the circular array, converted to a linear array
+*/
+
+void		*dq_arraydup(t_deque *dq)
+{
+	void		*tmp;
+
+	if (is_dq_empty(dq))
+		return (NULL);
+	tmp = malloc(dq->data_size * dq->curr_size);
+	if (!tmp)
+		return (NULL);
+	if (dq->rear < dq->front)
+	{
+		ft_memcpy(tmp, dq->tab + dq->rear,
+			(dq->front - dq->rear) * dq->data_size);
+	}
+	else
+	{
+		ft_memcpy(tmp, dq->tab + dq->rear,
+			(dq->max - dq->rear) * dq->data_size);
+		ft_memcpy(tmp + ((dq->max - dq->rear) * dq->data_size),
+			dq->tab, dq->front * dq->data_size);
+	}
+	return (tmp);
 }
