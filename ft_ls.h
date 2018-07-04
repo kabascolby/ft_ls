@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 13:15:00 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/02 05:48:23 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/03 13:21:59 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,25 @@ typedef struct			s_flags
 
 }						t_flags;
 
-// main struct
+typedef struct			s_tree
+{
+	char			*name;
+	uint8_t			cpt;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}					t_tree;
+
+/*
+**r is the root of the tree
+**f is a copy of my flag struct
+*/
 typedef	struct			s_ls
 {
 	t_flags				f;
 	DIR					*d;
+	t_tree				r;
 }						t_ls;
 
-typedef struct			s_tree
-{
-	char			*name;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}					t_tree;
 
 void	invalide_cmd(void);
 void	parse_directory(char *s, t_ls *ls);

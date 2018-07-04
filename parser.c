@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/22 18:22:12 by lkaba             #+#    #+#             */
-/*   Updated: 2018/06/24 20:04:00 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/03 13:34:05 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	parse_directory(char *s, t_ls *ls)
 	if (ls->d == NULL)
 		printf("empty folder\n");
 	while ((sd = readdir(ls->d)))
-		build_tree(ls->h, sd->d_name);
+		build_tree(ls, sd->d_name);
 	closedir(ls->d);
 }
 
