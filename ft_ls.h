@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 13:15:00 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/03 13:21:59 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/04 03:54:51 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct			s_flags
 
 typedef struct			s_tree
 {
-	char			*name;
+	char			*data;
 	uint8_t			cpt;
 	struct s_tree	*left;
 	struct s_tree	*right;
@@ -55,6 +55,7 @@ void	invalide_cmd(void);
 void	parse_directory(char *s, t_ls *ls);
 void	parse_flags(char *s, t_flags *f);
 void	parse_args(char *s, t_ls *ls);
+void	insert_tree(t_tree *r, char *s);
 
 
 /* typedef struct {
