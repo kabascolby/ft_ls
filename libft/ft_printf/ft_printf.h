@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 20:15:44 by lkaba             #+#    #+#             */
-/*   Updated: 2018/06/07 13:10:41 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/05 19:01:16 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <wchar.h>
 # define NUM(c) ((c) - '0')
 # define CE_(a, b) ((a) == (b))
 # define CE_2(a, b, c) (CE_(a, b) || CE_(a, c))
 # define CE_3(a, b, c, d) (CE_(a, b) || CE_(a, c) || CE_(a, d))
 # define CE_4(a, b, c, d, e) (CE_2(a, b, c) || CE_2(a, d, e))
 # define CE_5(a, b, c, d, e, f) (CE_3(a, b, c, d) || CE_2(a, e, f))
-
+# define NUMBERSET "0123456789abcdef0123456789ABCDEF"
 # define UM p->f.types.um
 # define IM p->f.types.im
 # define PL p->f.length

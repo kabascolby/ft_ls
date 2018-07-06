@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/21 07:56:37 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/04 03:40:56 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/04 23:30:45 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int main(int argc, char **argv)
 {
 	t_ls ls;
 	ft_bzero(&ls, sizeof(t_ls));
+	ls.insert_func = &insert_tree;
 	uint8_t i;
 	if (argc < 1 || ft_strnequ(argv[0], "ft_ls", 5))
 		invalide_cmd();

@@ -1,38 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstremove.c                                     :+:      :+:    :+:   */
+/*   ft_wstrdup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/22 16:12:07 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/05 19:05:17 by lkaba            ###   ########.fr       */
+/*   Created: 2018/04/06 13:37:51 by lkaba             #+#    #+#             */
+/*   Updated: 2018/04/06 13:40:11 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static t_list	*list_remove(t_list *lst, void *ptr)
+wchar_t		*ft_wstrdup(wchar_t *ws)
 {
-	t_list *temp;
+	wchar_t		*tmp;
+	int			i;
 
-	if (!lst)
+	if (!ws)
 		return (NULL);
-	if (lst->content == ptr)
-	{
-		temp = lst->next;
-		ft_memdel((void **)&lst);
-		return (temp);
-	}
-	lst->next = list_remove(lst->next, ptr);
-	return (lst);
-}
-
-/*
-** Removes a single node from a linked list.
-*/
-
-void			ft_lstremove(t_list **lst, void *ptr)
-{
-	*lst = list_remove(*lst, ptr);
+	i = -1;
+	while (ws[++i])
+		;
+	if (!(tmp = (wchar_t *)ft_strnew(sizeof(wchar_t) * i)))
+		return (NULL);
+	i = -1;
+	while (ws[++i])
+		tmp[i] = ws[i];
+	tmp[i] = L'\0';
+	return (tmp);
 }

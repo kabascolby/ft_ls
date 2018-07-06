@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 13:15:00 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/04 03:54:51 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/05 19:03:03 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,21 @@ typedef	struct			s_ls
 {
 	t_flags				f;
 	DIR					*d;
-	t_tree				r;
+	t_tree				*r;
+	t_tree				*(*insert_func)(t_tree *r, char *s);
 }						t_ls;
 
 
 void	invalide_cmd(void);
 void	parse_directory(char *s, t_ls *ls);
-void	parse_flags(char *s, t_flags *f);
+void	parse_flags(t_ls *ls, char *s, t_flags *f);
 void	parse_args(char *s, t_ls *ls);
-void	insert_tree(t_tree *r, char *s);
 
+t_tree	*insert_tree(t_tree *r, char *s);
+t_tree	*insert_tree_rev(t_tree *r, char *s);
+
+t_tree	*t_new_node(char *s);
+void	inorder_print(t_tree *r);
 
 /* typedef struct {
 	FTSENT *list;

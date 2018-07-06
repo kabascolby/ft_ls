@@ -65,6 +65,9 @@ FILES = ft_countwords.c\
 		ft_strmapi.c\
 		ft_lstdel.c\
 		ft_abs.c\
+		ft_wstrdup.c\
+		ft_strupcase.c\
+		ft_uitoabase.c\
 		ft_strchr.c\
 		get_next_line.c\
 		ft_print_words_tables.c\

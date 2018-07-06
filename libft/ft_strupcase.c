@@ -1,38 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstremove.c                                     :+:      :+:    :+:   */
+/*   ft_strupcase.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/22 16:12:07 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/05 19:05:17 by lkaba            ###   ########.fr       */
+/*   Created: 2015/09/08 18:26:29 by lamkaba2          #+#    #+#             */
+/*   Updated: 2018/07/05 18:54:08 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static t_list	*list_remove(t_list *lst, void *ptr)
+char	*ft_strupcase(char *str)
 {
-	t_list *temp;
+	int i;
 
-	if (!lst)
+	i = 0;
+	if (!str)
 		return (NULL);
-	if (lst->content == ptr)
+	while (str[i] != '\0')
 	{
-		temp = lst->next;
-		ft_memdel((void **)&lst);
-		return (temp);
+		if (str[i] >= 97 && str[i] <= 122)
+			str[i] = str[i] - 32;
+		i++;
 	}
-	lst->next = list_remove(lst->next, ptr);
-	return (lst);
-}
-
-/*
-** Removes a single node from a linked list.
-*/
-
-void			ft_lstremove(t_list **lst, void *ptr)
-{
-	*lst = list_remove(*lst, ptr);
+	return (str);
 }
