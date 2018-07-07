@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 16:01:21 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/02 22:23:25 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/06 01:45:53 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,5 @@ void			*dequeue_front(t_deque *dq);
 uint8_t			is_dq_empty(t_deque *dq);
 void			*dq_peek_rear(t_deque *dq);
 void			*dq_peek_front(t_deque *dq);
+void			*dq_arraydup(t_deque *dq);
 #endif

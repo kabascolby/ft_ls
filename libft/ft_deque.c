@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/01 21:19:22 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/03 12:27:51 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/07 00:40:13 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ uint8_t		dq_grow(t_deque *dq)
 		return (0);
 	ft_memset((uint8_t *)ptr, 0, dq->capacity);
 	old_rear = dq->rear * dq->data_size;
-	rear_index = (dq->max * dq->data_size) - old_rear;
+	rear_index = (dq->max * dq->data_size) - (((dq->max / 2) * dq->data_size) - old_rear);
 	ft_memcpy(ptr + rear_index, (uint8_t *)dq->tab + old_rear,
 		(dq->max * dq->data_size) - rear_index);
-	ft_memcpy(ptr, dq->tab, dq->front * dq->data_size);
+	ft_memcpy(ptr, dq->tab, dq->rear dq->front * dq->data_size);
 	dq->rear = rear_index / dq->data_size;
 	free(dq->tab);
 	dq->tab = (void *)ptr;

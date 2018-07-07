@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/22 18:22:12 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/04 23:30:52 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/07 09:56:37 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	parse_flags(t_ls *ls, char *s, t_flags *f)
 {
-	ft_putstr("here\n");
+	//ft_putstr("here\n");
 	char *command = "lRart";
 	uint8_t i;
 
@@ -33,35 +33,76 @@ void	parse_flags(t_ls *ls, char *s, t_flags *f)
 	}
 }
 
-void	parse_directory(char *s, t_ls *ls)
+void	display_arg(t_ls *ls, char *s)
 {
 	struct dirent *sd;
-	//printf("string = %s | value of directory flags %hhu", s, ls->f.isdir);
-	//printf("imhere\n");
-	//printf("fl = %hhu\n | fR = %hhu\n | fa = %hhu\n | fr = %hhu\n | ft = %hhu\n",ls->f.fl ,ls->f.fR ,ls->f.fa ,ls->f.fr ,ls->f.ft);
+	printf(" | fl = %hhu\n | fR = %hhu\n | fa = %hhu\n | fr = %hhu\n | ft = %hhu\n",
+		ls->f.fl ,ls->f.fR ,ls->f.fa ,ls->f.fr ,ls->f.ft);
+
 	ls->d = opendir(s);
 	if (ls->d == NULL)
 		printf("empty folder\n");
 	while ((sd = readdir(ls->d)))
-		ls->r = ls->insert_func(ls->r, sd->d_name);
-	//traverse_dir(ls);
-	inorder_print(ls->r);
+	{
+		ls->inv_file = ls->insert_func(ls->inv_file, sd->d_name);
+	}
+	inorder_print(ls->inv_file, "", "");
 	closedir(ls->d);
 }
 
-t_tree	*create_node(t_tree *tmp, char *s)
+void	parse_argv(t_ls *ls, char *s)
 {
-	tmp = (t_tree *)malloc(sizeof(t_tree));
-	tmp->data = s;
-	tmp->left = NULL;
-	tmp->right = NULL;
-	return(tmp);
+	struct stat			info;
+
+	if (s[0] == '-' && !ls->f.isarg)
+		parse_flags(ls, ++s, &ls->f);
+	else if ((s && s[0] != '-' && (ls->f.isarg = 1)) || (s && ls->f.isarg == 1))
+	{
+		if (lstat(s, &info) != 0)
+			ls->inv_file = insert_tree(ls->inv_file, s);
+		else
+			ls->r = insert_tree(ls->r, s);
+	}
 }
 
-void	parse_args(char *s, t_ls *ls)
+/*
+** Print the arguments according to the flags;
+** and free all varialble I already printed.
+*/
+
+void	ls_print(t_ls *ls)
 {
-	if (s && s[0] != '-' && (ls->f.isdir = 1))
-		parse_directory(s, ls);
-	else if (s[0] == '-' && !ls->f.isdir)
-		parse_flags(ls, ++s, &ls->f);
+	//uint32_t	i;
+	//void		*tmp;
+
+	inorder_print(ls->inv_file, "ft_ls: ", ": No such file or directory");
+	deallocat_tree(ls->inv_file);
 }
+
+// void argv_check(t_ls *ls, void *tmp)
+// {
+// 	uint32_t i;
+// 	t_tree *r;
+// 	r = NULL;
+// 	char	**s = tmp;
+// 	//struct stat buf;
+// 	(void)ls;
+// 	i = -1;
+// 	while(++i < 4)
+// 	{
+// 		//lstat(((char *)tmp + i * ls->av.data_size), &buf);
+// 		ft_printf("device %s\n", s[i]);
+// 		// if (buf.st_dev == 0)
+// 		// {
+// 		// 	r = insert_tree(r, ((char *)tmp + i * ls->av.data_size));
+// 		// }
+// 		// else
+// 		// {
+// 		// 	ls->av.front = 0;
+// 		// 	ls->av.rear = 0;
+// 		// 	ls->av.curr_size = 0;
+// 		// 	enqueue_front(&ls->av, tmp + i * ls->av.data_size);
+// 		// }
+// 	}
+// 	free(tmp);
+// }

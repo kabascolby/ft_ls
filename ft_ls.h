@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 13:15:00 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/05 19:03:03 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/07 10:49:34 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <stdint.h>
+# include <time.h>
 
 // bitfield operator for flags struct
 
@@ -27,14 +28,14 @@ typedef struct			s_flags
 	u_int8_t			fa:1;
 	u_int8_t			fr:1;
 	u_int8_t			ft:1;
-	u_int8_t			isdir:1;
+	u_int8_t			isarg:1;
 
 }						t_flags;
 
 typedef struct			s_tree
 {
 	char			*data;
-	uint8_t			cpt;
+	struct stat		buf;
 	struct s_tree	*left;
 	struct s_tree	*right;
 }					t_tree;
@@ -42,26 +43,32 @@ typedef struct			s_tree
 /*
 **r is the root of the tree
 **f is a copy of my flag struct
+**dq is my deque data structure;
 */
 typedef	struct			s_ls
 {
 	t_flags				f;
 	DIR					*d;
+	t_tree				*inv_file;
 	t_tree				*r;
-	t_tree				*(*insert_func)(t_tree *r, char *s);
+	t_tree				*fd;
+	t_tree				*(*insert_func)(t_tree *r, char *s);;
+	t_deque				dq;
 }						t_ls;
 
 
 void	invalide_cmd(void);
-void	parse_directory(char *s, t_ls *ls);
+void	parse_argv(t_ls *ls, char *s);
 void	parse_flags(t_ls *ls, char *s, t_flags *f);
-void	parse_args(char *s, t_ls *ls);
+void	display_arg(t_ls *ls, char *s);
 
 t_tree	*insert_tree(t_tree *r, char *s);
 t_tree	*insert_tree_rev(t_tree *r, char *s);
 
-t_tree	*t_new_node(char *s);
-void	inorder_print(t_tree *r);
+t_tree	*t_new_node(t_tree *r, char *s);
+void	inorder_print(t_tree *r, char *info1, char *info2);
+void	ls_print(t_ls *ls);
+void	deallocat_tree(t_tree *r);
 
 /* typedef struct {
 	FTSENT *list;

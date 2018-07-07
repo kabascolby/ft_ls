@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/02 03:43:28 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/03 12:32:10 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/07 03:57:23 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,12 @@ void		*dq_arraydup(t_deque *dq)
 		return (NULL);
 	if (dq->rear < dq->front)
 	{
-		ft_memcpy(tmp, dq->tab + dq->rear,
+		ft_memcpy(tmp, dq->tab + (dq->rear * dq->data_size),
 			(dq->front - dq->rear) * dq->data_size);
 	}
 	else
 	{
-		ft_memcpy(tmp, dq->tab + dq->rear,
+		ft_memcpy(tmp, dq->tab + (dq->rear * dq->data_size),
 			(dq->max - dq->rear) * dq->data_size);
 		ft_memcpy(tmp + ((dq->max - dq->rear) * dq->data_size),
 			dq->tab, dq->front * dq->data_size);
