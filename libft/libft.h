@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 13:33:59 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/05 18:57:24 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/10 04:25:21 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,4 +135,5 @@ void			ft_add_to_darray(void *data, t_dynamic_array *da);
 char			*ft_strupcase(char *str);
 wchar_t			*ft_wstrdup(wchar_t *ws);
 char			*ft_uitoabase(uintmax_t val, int base, int opt);
+char			*ft_str_cat_free(char **s, int j, char *s2);
 #endif

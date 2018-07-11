@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/02 03:43:28 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/07 03:57:23 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/10 06:18:02 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_deque		init_deque(uint32_t length, uint8_t data_t_size)
 
 uint8_t		is_dq_empty(t_deque *dq)
 {
-	return (!dq->curr_size);
+	return (dq->curr_size == 0);
 }
 
 /*

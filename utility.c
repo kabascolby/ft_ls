@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 09:35:45 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/07 11:22:32 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/09 05:46:32 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 
 //this have to change according to -R
 //because s will change and take the full path
-int compare_flags(t_ls *ls, char * s)
+int compare_by_time(t_tree *a, t_tree *b)
 {
-
-    if(!ls->f.ft)
+    if(a->buf.st_mtimespec.tv_sec < b->buf.st_mtimespec.tv_sec)
+        return(1);
+    else if (a->buf.st_mtimespec.tv_sec == b->buf.st_mtimespec.tv_sec)
     {
-        if(ft_strcmp(ls->r->data, s) > 0 && !ls->f.fr)
-            return(1);
-        else
-            return(-1);
+        if(a->buf.st_mtimespec.tv_nsec < b->buf.st_mtimespec.tv_nsec)
+            return (1);
     }
-    else(ft_strcmp(ls->r->buf.st_mtime, ))
+    return (0);   
+}
+
+int compare_by_name(t_tree *a, t_tree *b)
+{
+    return(ft_strcmp(a->name, b->name) > 0 ? 1 : 0);
 }

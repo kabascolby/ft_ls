@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/22 18:22:12 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/07 09:56:37 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/10 08:24:37 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,81 +28,76 @@ void	parse_flags(t_ls *ls, char *s, t_flags *f)
 		f->fa = !f->fa && CE_('a', s[i]) ? 1 : f->fa;
 		f->fr = !f->fr && CE_('r', s[i]) ? 1 : f->fr;
 		f->ft = !f->ft && CE_('t', s[i]) ? 1 : f->ft;
-		if (CE_('r', s[i]))
-			ls->insert_func = &insert_tree_rev;
+		if (CE_('t', s[i]))
+			ls->compare = compare_by_time;
 	}
 }
 
-void	display_arg(t_ls *ls, char *s)
+void	display_arg(t_ls *ls, t_tree *r)
 {
-	struct dirent *sd;
-	printf(" | fl = %hhu\n | fR = %hhu\n | fa = %hhu\n | fr = %hhu\n | ft = %hhu\n",
-		ls->f.fl ,ls->f.fR ,ls->f.fa ,ls->f.fr ,ls->f.ft);
-
-	ls->d = opendir(s);
-	if (ls->d == NULL)
-		printf("empty folder\n");
-	while ((sd = readdir(ls->d)))
-	{
-		ls->inv_file = ls->insert_func(ls->inv_file, sd->d_name);
-	}
-	inorder_print(ls->inv_file, "", "");
-	closedir(ls->d);
+	// printf(" | fl = %hhu\n | fR = %hhu\n | fa = %hhu\n | fr = %hhu\n | ft = %hhu\n",
+	// 	ls->f.fl ,ls->f.fR ,ls->f.fa ,ls->f.fr ,ls->f.ft);
+	if(!r)
+		return;
+	inorder_print2(ls, r);
+			ft_printf("ici\n");
+		//ls->dir = ((t_tree *)dequeue_front(&ls->dq));
+		//display_arg(ls, ls->dir);
+		ft_putstr("\n");
 }
+
+/*
+** check the arguments and put the bad args in
+** b_args three for inorder sorting;
+** and the good args in r tree also for sorting
+** according to the flags;
+** after the two operation the bad flags are printed;
+*/
 
 void	parse_argv(t_ls *ls, char *s)
 {
-	struct stat			info;
+	t_tree				*node;
 
 	if (s[0] == '-' && !ls->f.isarg)
 		parse_flags(ls, ++s, &ls->f);
 	else if ((s && s[0] != '-' && (ls->f.isarg = 1)) || (s && ls->f.isarg == 1))
 	{
-		if (lstat(s, &info) != 0)
-			ls->inv_file = insert_tree(ls->inv_file, s);
+		node = t_new_node(s, s);
+		if (lstat(node->path, &node->buf) != 0)
+			ls->b_args = insert_by_name(ls->b_args, node);
 		else
-			ls->r = insert_tree(ls->r, s);
+			ls->r = insert_by_flags(ls, ls->r, node);
 	}
 }
 
-/*
-** Print the arguments according to the flags;
-** and free all varialble I already printed.
-*/
-
 void	ls_print(t_ls *ls)
 {
-	//uint32_t	i;
-	//void		*tmp;
-
-	inorder_print(ls->inv_file, "ft_ls: ", ": No such file or directory");
-	deallocat_tree(ls->inv_file);
+	inorder_print(ls->b_args, "ft_ls: ", ": No such file or directory");
+	deallocat_tree(ls->b_args);
+	display_arg(ls, ls->r);
 }
 
-// void argv_check(t_ls *ls, void *tmp)
-// {
-// 	uint32_t i;
-// 	t_tree *r;
-// 	r = NULL;
-// 	char	**s = tmp;
-// 	//struct stat buf;
-// 	(void)ls;
-// 	i = -1;
-// 	while(++i < 4)
-// 	{
-// 		//lstat(((char *)tmp + i * ls->av.data_size), &buf);
-// 		ft_printf("device %s\n", s[i]);
-// 		// if (buf.st_dev == 0)
-// 		// {
-// 		// 	r = insert_tree(r, ((char *)tmp + i * ls->av.data_size));
-// 		// }
-// 		// else
-// 		// {
-// 		// 	ls->av.front = 0;
-// 		// 	ls->av.rear = 0;
-// 		// 	ls->av.curr_size = 0;
-// 		// 	enqueue_front(&ls->av, tmp + i * ls->av.data_size);
-// 		// }
-// 	}
-// 	free(tmp);
-// }
+t_tree	*ft_ls(t_ls *ls, t_tree *tmp)
+{
+	t_tree			*node;
+	static char 	path[1024];
+	
+	while ((ls->sd = readdir(ls->d)))
+	{
+		if(ls->sd->d_name[0] != '.')
+		{
+			//ft_putstr(ls->sd->d_name);
+			ft_strcpy(path, tmp->path);
+			ft_strcat(path, "/");
+			ft_strcat(path, ls->sd->d_name);
+			// ft_putstr(path);
+			// ft_putstr("\n");
+			node = t_new_node(path, ls->sd->d_name);
+			node = insert_by_flags(ls, tmp->sub_dir, node);
+			//node->path = ft_str_cat_free((ft_strdup(node->path)), ft_strlen(tmp->name), "/")
+		}
+	}
+	//inorder_print(ls->b_args, "", "");
+	closedir(ls->d);
+	return(node);
+}

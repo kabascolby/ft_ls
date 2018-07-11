@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 13:15:00 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/07 10:49:34 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/10 08:06:53 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,12 @@ typedef struct			s_flags
 
 typedef struct			s_tree
 {
-	char			*data;
+	char			*name;
+	char			*path;
 	struct stat		buf;
 	struct s_tree	*left;
 	struct s_tree	*right;
+	struct s_tree	*sub_dir;
 }					t_tree;
 
 /*
@@ -49,10 +51,12 @@ typedef	struct			s_ls
 {
 	t_flags				f;
 	DIR					*d;
-	t_tree				*inv_file;
+	struct dirent		*sd;
+	t_tree				*b_args;
 	t_tree				*r;
 	t_tree				*fd;
-	t_tree				*(*insert_func)(t_tree *r, char *s);;
+	t_tree				*dir;
+	int					(*compare)(t_tree *, t_tree *);
 	t_deque				dq;
 }						t_ls;
 
@@ -60,15 +64,22 @@ typedef	struct			s_ls
 void	invalide_cmd(void);
 void	parse_argv(t_ls *ls, char *s);
 void	parse_flags(t_ls *ls, char *s, t_flags *f);
-void	display_arg(t_ls *ls, char *s);
+void	display_arg(t_ls *ls, t_tree *r);
 
 t_tree	*insert_tree(t_tree *r, char *s);
 t_tree	*insert_tree_rev(t_tree *r, char *s);
 
-t_tree	*t_new_node(t_tree *r, char *s);
+t_tree	*t_new_node(char *path, char *name);
+t_tree	*insert_by_name(t_tree *r, t_tree *node);
+t_tree	*insert_by_flags(t_ls *ls, t_tree *r, t_tree *node);
+int		compare_by_time(t_tree *a, t_tree *b);
+int		compare_by_name(t_tree *a, t_tree *b);
 void	inorder_print(t_tree *r, char *info1, char *info2);
+void	inorder_print2(t_ls *ls, t_tree *r);
+
 void	ls_print(t_ls *ls);
 void	deallocat_tree(t_tree *r);
+t_tree	*ft_ls(t_ls *ls, t_tree *tmp);
 
 /* typedef struct {
 	FTSENT *list;
