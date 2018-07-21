@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 21:25:18 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/17 06:55:22 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/21 14:19:15 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,13 @@ t_tree	*insert_by_flags(t_ls *ls, t_tree *r, t_tree *node)
 void	inorder_print(t_tree *r,  char *info1, char *info2)
 {
 	if (!r)
-		return;
+		return ;
 	inorder_print(r->left, info1, info2);
 	printf("%s%s%s\n", info1, r->name, info2);
 	inorder_print(r->right, info1, info2);
+	free(r->name);
+	free(r->path);
+	free(r);
 }
 
 void	deallocat_tree(t_tree *r)

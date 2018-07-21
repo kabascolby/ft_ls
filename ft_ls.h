@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 13:15:00 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/17 07:47:11 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/21 08:04:52 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef	struct			s_ls
 	struct dirent		*sd;
 	t_tree				*b_args;
 	t_tree				*r;
+	t_tree				*r2;
 	t_tree				*fd;
 	t_tree				*dir;
 	struct passwd 		*pwuser;
@@ -72,14 +73,16 @@ typedef	struct			s_ls
 	uint8_t				(*compare)(t_tree *, t_tree *);
 	void				(*printfn)(struct s_ls *t_ls, t_tree *node);
 	void				(*is_recursive)(struct s_ls *t_ls, t_tree *r);
-	uint32_t			num_node;
+	uint32_t			num_arg;
 	uint16_t			nmax;
 	uint16_t			unmax;
 	uint16_t			gnmax;
 	uint16_t			szmax;
 	uint8_t				ncol;
 	uint64_t			total;
-	t_deque				dq;
+	t_queue				*q;
+	stack_t				stk;
+	uint8_t				minormax;
 	uint16_t			twidth;
 	uint16_t			theight;	
 }						t_ls;
@@ -117,9 +120,11 @@ t_tree	*insert_by_name(t_tree *r, t_tree *node);
 t_tree	*insert_by_flags(t_ls *ls, t_tree *r, t_tree *node);
 void	inorder_print(t_tree *r, char *info1, char *info2);
 void	inorder_print2(t_ls *ls, t_tree *r);
-void	recursive_ls(t_ls *ls, char *name);
+void	inorder_traverse(t_ls *ls, t_tree *r);
+void	recursive_ls(t_ls *ls, void *);
 void	ls_print(t_ls *ls);
 void	deallocat_tree(t_tree *r);
 void	ft_ls(t_ls *ls, t_tree *r);
+//void	inoder_traverse(t_ls *ls, t_tree *r);
 
 #endif

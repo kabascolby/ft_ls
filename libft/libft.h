@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 13:33:59 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/10 04:25:21 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/21 15:53:33 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int				ft_debug(char *s);
 void			ft_print_words_tables(char **tab);
 int				get_next_line(int fd, char **line);
 int				ft_strcchr(char *str, char c);
-t_queue			*init(t_queue *q);
+t_queue			*init(void);
 void			enqueue(t_queue *q, void *n);
 void			*dequeue(t_queue *q);
 void			*peek(t_queue *q);
