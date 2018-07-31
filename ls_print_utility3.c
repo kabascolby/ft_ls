@@ -1,20 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   usage.c                                            :+:      :+:    :+:   */
+/*   ls_print_utility3.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/22 18:36:22 by lkaba             #+#    #+#             */
-/*   Updated: 2018/06/24 07:21:30 by lkaba            ###   ########.fr       */
+/*   Created: 2018/07/30 18:25:42 by lkaba             #+#    #+#             */
+/*   Updated: 2018/07/30 19:52:26 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void invalide_cmd(void)
+void	no_print_string(t_ls *ls, char *s)
 {
-	ft_putendl("Invalide commande\n usage:\
-		ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]");
-	exit(1);
+	(void)s;
+	(void)ls;
+}
+
+void	no_print_dirname(t_ls *ls, char *s)
+{
+	(void)s;
+	ls->fnptr_dir_name = print_dirname;
+}
+
+void	inorder_print(t_tree *r, char *info1, char *info2)
+{
+	if (!r)
+		return ;
+	inorder_print(r->left, info1, info2);
+	ft_printf("%s%s%s\n", info1, r->name, info2);
+	inorder_print(r->right, info1, info2);
+	free(r->name);
+	free(r->path);
+	free(r);
 }

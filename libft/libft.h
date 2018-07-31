@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 13:33:59 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/21 15:53:33 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/30 18:07:40 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,5 @@ char			*ft_strupcase(char *str);
 wchar_t			*ft_wstrdup(wchar_t *ws);
 char			*ft_uitoabase(uintmax_t val, int base, int opt);
 char			*ft_str_cat_free(char **s, int j, char *s2);
+uint64_t 		ft_numdigit(uint64_t num);
 #endif

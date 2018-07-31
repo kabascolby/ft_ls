@@ -6,12 +6,12 @@
 #    By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/07 05:25:18 by lkaba             #+#    #+#              #
-#    Updated: 2018/07/07 05:25:20 by lkaba            ###   ########.fr        #
+#    Updated: 2018/07/30 18:16:15 by lkaba            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_ls
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 FILES = $(wildcard *.c)
 OFILES = $(patsubst %.c, %.o, $(FILES))
 LIBFT = libft.a

@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/26 12:13:12 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/29 17:19:06 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/30 19:48:18 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	print_simple(t_ls *ls, t_tree *node)
 {
 	ls->inode_print(ls, (int)node->buf.st_ino);
 	ls->size_print(ls, (uint32_t)node->buf.st_blocks);
-	//ft_printf("%s%s\n", node->name, ls->gnmax);
 }
 
 void	print_long_format(t_ls *ls, t_tree *node)
@@ -32,8 +31,8 @@ void	print_long_format(t_ls *ls, t_tree *node)
 	char		*f;
 	uint8_t		ln;
 	char		*times;
-	//char		*inode;
-	uint32_t 	size;
+	uint32_t	size;
+
 	f = chmod_format(node, node->buf.st_mode);
 	ln = node->buf.st_nlink;
 	size = node->buf.st_size;
@@ -49,7 +48,7 @@ void	print_long_format(t_ls *ls, t_tree *node)
 	ft_printf(" %.12s %s\n", times, node->name);
 }
 
-void invalide_cmd(void)
+void	invalide_cmd(void)
 {
 	ft_putendl("Invalide commande\n usage:\
 		ls [-acglnuiRrst] [file ...]");

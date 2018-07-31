@@ -78,6 +78,7 @@ FILES = ft_countwords.c\
 		ft_deque.c\
 		ft_deque2.c\
 		ft_str_cat_free.c\
+		ft_numdigit.c\
 		ft_debug.c
 
 NAME = libft.a

@@ -1,40 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ls_print_utility.c                                 :+:      :+:    :+:   */
+/*   ls_print_utility2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/26 12:35:41 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/30 19:45:57 by lkaba            ###   ########.fr       */
+/*   Created: 2018/07/30 17:54:39 by lkaba             #+#    #+#             */
+/*   Updated: 2018/07/30 19:46:29 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int		print_total(uint32_t n)
+void	print_sizeblk(t_ls *ls, uint32_t n)
 {
-	ft_printf("total %lld\n", n);
-	return (1);
+	ft_printf("%*d ", ls->size_max, n);
 }
 
-int		no_print_total(uint32_t n)
+void	noprint(t_ls *ls, uint32_t n)
 {
+	(void)ls;
 	(void)n;
-	return (0);
 }
 
-void	print_inode(t_ls *ls, uint32_t n)
+void	print_grp_name(t_ls *ls, char *s)
 {
-	ft_printf("%*d ", ls->inode_max, n);
+	ft_printf("%*s ", ls->gnmax, s);
 }
 
-void	print_usrid(t_ls *ls, uint32_t n)
+void	print_user_name(t_ls *ls, char *s)
 {
-	ft_printf(" %*d ", ls->uidmax + 1, n);
+	ft_printf(" %-*s", ls->unmax, s);
 }
 
-void	print_grpid(t_ls *ls, uint32_t n)
+void	print_dirname(t_ls *ls, char *s)
 {
-	ft_printf("%*d ", ls->gidmax + 1, n);
+	(void)ls;
+	ft_printf("\n%s:\n", s);
 }
