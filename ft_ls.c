@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/30 16:40:07 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/30 18:49:34 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/30 22:09:12 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void		ft_ls(t_ls *ls, t_tree *r)
 	{
 		ls->fnptr_dir_name(ls, r->path);
 		q = inorder_traverse(ls, ls_dir(ls, r->path),
-			(ls->fnptr_total(ls->total)) && ls->f.fR ? init() : 0);
+			(ls->fnptr_total(ls->total)) && ls->f.fcr ? init() : 0);
 		if (q)
 		{
 			while (!is_empty(q))

@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 17:23:13 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/21 15:53:56 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/31 14:16:15 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 t_queue	*init(void)
 {
-	t_queue  *q;
+	t_queue	*q;
 
 	q = (t_queue *)malloc(sizeof(t_queue));
 	q->front = NULL;

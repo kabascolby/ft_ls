@@ -6,29 +6,34 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/21 07:56:37 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/30 21:31:00 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/31 13:56:13 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int	main(int argc, char **argv)
+void	init_fnptr(t_ls *ls)
+{
+	ls->fnptr_total = no_print_total;
+	ls->compare = compare_by_name;
+	ls->printfn = print_multi_col;
+	ls->insert = insert_by_flags;
+	ls->fnptr_user_name = print_user_name;
+	ls->inode_print = noprint;
+	ls->size_print = noprint;
+	ls->fnptr_grp_name = print_grp_name;
+	ls->fnptr_user_id = noprint;
+	ls->fnptr_grp_id = noprint;
+	ls->is_recursive = NULL;
+}
+
+int		main(int argc, char **argv)
 {
 	int32_t	i;
 	t_ls	ls;
 
 	ft_bzero(&ls, sizeof(t_ls));
-	ls.fnptr_total = no_print_total;
-	ls.compare = compare_by_name;
-	ls.printfn = print_multi_col;
-	ls.insert = insert_by_flags;
-	ls.fnptr_user_name = print_user_name;
-	ls.inode_print = noprint;
-	ls.size_print = noprint;
-	ls.fnptr_grp_name = print_grp_name;
-	ls.fnptr_user_id = noprint;
-	ls.fnptr_grp_id = noprint;
-	ls.is_recursive = NULL;
+	init_fnptr(&ls);
 	if (argc < 1 || ft_strnequ(argv[0], "ft_ls", 5))
 		invalide_cmd();
 	i = 0;

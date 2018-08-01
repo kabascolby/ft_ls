@@ -81,14 +81,18 @@ FILES = ft_countwords.c\
 		ft_numdigit.c\
 		ft_debug.c
 
+OFILES = $(FILES:.c=.o)
 NAME = libft.a
 
 FLAGS = -Wall -Wextra -Werror
 
-$(NAME):
-	@gcc -c $(FILES) $(FLAGS)
-	@ar rc $(NAME) $(FILES:.c=.o)
+$(NAME): $(OFILES)
+	@ar rc $(NAME) $^
 	@ranlib $(NAME)
+
+%.o: %.c
+#	echo Compiling $@...
+	@gcc $(FLAGS) -c $< -o $@
 
 all: $(NAME)
 

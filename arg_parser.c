@@ -6,7 +6,7 @@
 /*   By: lkaba <lkaba@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/22 18:22:12 by lkaba             #+#    #+#             */
-/*   Updated: 2018/07/30 19:40:00 by lkaba            ###   ########.fr       */
+/*   Updated: 2018/07/31 14:07:39 by lkaba            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	parse_flags(t_ls *ls, char *s, t_flags *f)
 		if (!ft_strcchr(FSTR, s[i]))
 			invalide_cmd();
 		f->fa = !f->fa && CE_('a', s[i]) ? 1 : f->fa;
-		f->fR = !f->fR ? CE_('R', s[i]) : f->fR;
+		f->fcr = !f->fcr ? CE_('R', s[i]) : f->fcr;
 		if (!f->fc && (f->fc = CE_('c', s[i])))
 			f->fu = 0;
 		if (!f->ft && (f->ft = CE_('t', s[i])))
@@ -65,7 +65,7 @@ void	parse_flags2(t_ls *ls, char *s, t_flags *f)
 	ls->fnptr_user_id = (f->fg && f->fn) ? noprint : ls->fnptr_user_id;
 	ls->compare = (f->fc && f->ft) ? compare_by_status_time : ls->compare;
 	ls->compare = (f->fu && f->ft) ? compare_by_access_time : ls->compare;
-	ls->fnptr_total = (f->fl || f->fg || f->fn) ? print_total : ls->fnptr_total;
+	ls->fnptr_total = (f->fcr) ? print_total : ls->fnptr_total;
 }
 
 /*
